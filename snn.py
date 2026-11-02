@@ -295,7 +295,7 @@ class HybridAttention(nn.Module):
         v_sel = v_g.reshape(B * self.HG, T, self.hd).gather(1, flat_idx).view(B, self.HG, T, K, self.hd)
 
         logits = torch.einsum("bhtd,bhtkd->bhtk", q_g, k_sel) / math.sqrt(self.hd)
-        logits = logits + topv[:, None].detach()
+        logits = logits + topv[:, None]
         attn = F.softmax(logits, dim=-1)
         out_g = torch.einsum("bhtk,bhtkd->bhtd", attn, v_sel)
 
